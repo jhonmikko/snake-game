@@ -12,6 +12,7 @@ let velocityX = 0, velocityY = 0;
 let snakeBody = [];
 let setIntervalId;
 let score = 0;
+let speed = 100;
 
 // Retrieving high score from local storage or setting it to 0 if not available
 let highScore = localStorage.getItem("high-score") || 0;
@@ -61,7 +62,16 @@ const initGame = () => {
         updateFoodPosition(); // Update food position
         snakeBody.push([foodX, foodY]); // Add food to snake body
         score++; // Increase score
+        
+        clearInterval(setIntervalId);
+        //Check if speed is equal to maximum speed. If not increase speed of the snake
+        if(speed !== 40){ 
+            speed -= 2;
+        }
+        
+        setIntervalId = setInterval(initGame, speed);
         highScore = score >= highScore ? score: highScore; // Update high score
+        
 
         localStorage.setItem("high-score", highScore); // Store high score in local storage
         scoreElement.innerText = `Score: ${score}`; // Update score in UI
@@ -95,5 +105,5 @@ const initGame = () => {
 }
 
 updateFoodPosition(); // Initialize food position
-setIntervalId = setInterval(initGame, 100); // Start the game loop
+setIntervalId = setInterval(initGame, speed); // Start the game loop
 document.addEventListener("keyup", changeDirection); // Event listener for keyboard input
